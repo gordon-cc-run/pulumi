@@ -809,6 +809,10 @@ const cleanUp = async (logFile?: string, rl?: ReadlineResult) => {
     }
     if (logFile) {
         // remove the logfile
-        fs.rm(path.dirname(logFile), { recursive: true }, () => { return; });
+        if ('rm' in fs) { // Node v14.14.0+
+            fs.rm(path.dirname(logFile), { recursive: true }, () => { return; });
+        } else {
+            fs.rmdir(path.dirname(logFile), { recursive: true }, () => { return; });
+        }
     }
 };
